@@ -3,8 +3,8 @@
 // Configuración de la conexión a la base de datos
 
 $host = 'localhost';
-$db   = 'celebraapp'; // Cambia si usas otro nombre de base de datos
-$user = 'root';      // Cambia si tu usuario es diferente
+$db   = 'celebraapp'; //base de datos 
+$user = 'root';      // usuario 
 $pass = '';
 
 $conn = new mysqli($host, $user, $pass, $db);

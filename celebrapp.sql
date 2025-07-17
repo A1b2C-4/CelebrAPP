@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS users (
 INSERT INTO users (username, password) VALUES ('admin', '$2y$10$w6Qw6Qw6Qw6Qw6Qw6Qw6QeQw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6');
 -- El hash corresponde a la contraseña 'admin123' generada con password_hash('admin123', PASSWORD_DEFAULT)
 
--- database/celebrapp.sql
 CREATE TABLE IF NOT EXISTS birthdays (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_completo VARCHAR(100) NOT NULL,
