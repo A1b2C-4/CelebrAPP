@@ -28,7 +28,7 @@ if (session_status() === PHP_SESSION_NONE) {
         .main-menu {
             display: flex;
             gap: 18px;
-            background: #4f6bed;
+            background: #4cc736ff;
             padding: 0 0 0 0;
             border-radius: 8px 8px 0 0;
             margin-bottom: 18px;
@@ -43,7 +43,7 @@ if (session_status() === PHP_SESSION_NONE) {
         }
         
         .main-menu a:hover, .main-menu a.active {
-            background: #364fc7;
+            background: #4cc736ff;
         }
         hr { border: none; border-top: 1px solid #e3e7ef; margin: 18px 0; }
     </style>

@@ -28,7 +28,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body>
     <div class="container">
-        <img src="https://cdn.pixabay.com/photo/2016/03/31/19/14/birthday-1298564_1280.png" alt="" class="main-img">
+        <img src="minion.jpg" alt="" class="main-img">
         <h1>¡Bienvenido a CelebrAPP!</h1>
         <p>Gestiona y recuerda los cumpleaños de tus amigos, familiares y compañeros de forma sencilla y visual.<br>¡Nunca olvides una fecha especial!</p>
         <div class="main-buttons">

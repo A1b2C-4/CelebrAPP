@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="login-header">
-        <img src="minion.jpg" alt="🎂">
+        <img src="inicio.jpg" alt="">
         <h1>CelebrAPP</h1>
     </div>
     <div class="login-box">
