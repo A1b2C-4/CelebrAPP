@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
     <div class="container">
         <img src="minion.jpg" alt="" class="main-img">
         <h1>¡Bienvenido a CelebrAPP!</h1>
-        <p>Gestiona y recuerda los cumpleaños de tus amigos, familiares y compañeros de forma sencilla y visual.<br>¡Nunca olvides una fecha especial!</p>
+        <p> Recuerda los cumpleaños de tus amigos y familiares<br>¡Nunca olvides una fecha especial!</p>
         <div class="main-buttons">
             <a href="view_birthdays.php">Ver cumpleaños</a>
             <a href="add_birthday.php">Agregar cumpleaños</a>

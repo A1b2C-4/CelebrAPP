@@ -27,23 +27,57 @@ if (session_status() === PHP_SESSION_NONE) {
         /* Menú principal */
         .main-menu {
             display: flex;
-            gap: 18px;
-            background: #4cc736ff;
-            padding: 0 0 0 0;
+            gap: 14px;
+            background: transparent;
+            padding: 0;
             border-radius: 8px 8px 0 0;
             margin-bottom: 18px;
+            align-items: center;
         }
-        .main-menu a {
+        .main-menu a.menu-btn {
+            background: #43b649;
             color: #fff;
             text-decoration: none;
-            padding: 16px 28px;
-            display: block;
+            padding: 12px 24px;
+            border-radius: 6px;
             font-weight: 500;
-            transition: background 0.2s;
+            font-size: 1em;
+            box-shadow: 0 2px 8px #0001;
+            border: none;
+            transition: background 0.18s, box-shadow 0.18s;
+            display: block;
         }
-        
-        .main-menu a:hover, .main-menu a.active {
-            background: #4cc736ff;
+        .main-menu a.menu-btn:hover, .main-menu a.menu-btn.active {
+            background: #2e8b36;
+            color: #fff;
+            box-shadow: 0 4px 16px #0002;
+        }
+        .main-menu a.logout-btn {
+            background: #e53e3e;
+            color: #fff;
+            margin-left: 12px;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-weight: 500;
+            font-size: 1em;
+            border: none;
+            transition: background 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px #0001;
+            text-decoration: none;
+            display: block;
+        }
+        .main-menu a.logout-btn:hover {
+            background: #b91c1c;
+            color: #fff;
+            box-shadow: 0 4px 16px #0002;
+        }
+        .main-menu .user-info {
+            margin-left: auto;
+            color: #2d3a5a;
+            font-weight: 500;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
         }
         hr { border: none; border-top: 1px solid #e3e7ef; margin: 18px 0; }
     </style>
@@ -52,14 +86,11 @@ if (session_status() === PHP_SESSION_NONE) {
 <div class="container">
     <h1>CelebrAPP 🎉</h1>
     <nav class="main-menu">
-        <a href="view_birthdays.php" class="<?= basename($_SERVER['PHP_SELF'])=='view_birthdays.php'?'active':'' ?>">Ver cumpleaños</a>
-        <a href="add_birthday.php" class="<?= basename($_SERVER['PHP_SELF'])=='add_birthday.php'?'active':'' ?>">Agregar cumpleaños</a>
-        <a href="index.php" class="<?= basename($_SERVER['PHP_SELF'])=='index.php'?'active':'' ?>">Inicio</a>
-       
-        <?php
-         if (isset($_SESSION['username'])): ?>
-            <span style="margin-left:auto; color:#fff; padding:16px 18px;">👤 <?= htmlspecialchars($_SESSION['username']) ?></span>
-        <a href="logout.php" style="background:#e53e3e; margin-left:8px;">Cerrar sesión</a>
+        <a href="index.php" class="menu-btn <?= basename($_SERVER['PHP_SELF'])=='index.php'?'active':'' ?>">Inicio</a>
+        <a href="view_birthdays.php" class="menu-btn <?= basename($_SERVER['PHP_SELF'])=='view_birthdays.php'?'active':'' ?>">Ver cumpleaños</a>
+        <a href="add_birthday.php" class="menu-btn <?= basename($_SERVER['PHP_SELF'])=='add_birthday.php'?'active':'' ?>">Agregar cumpleaños</a>
+        <?php if (isset($_SESSION['username'])): ?>
+            <a href="logout.php" class="logout-btn">Cerrar sesión</a>
         <?php endif; ?>
     </nav>
-    <hr> 
+    <hr>
