@@ -48,7 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1>CelebrAPP</h1>
     </div>
     <div class="login-box">
-        <h2>Iniciar sesión</h2>
+        <h2>
+
+        Iniciar sesión
+    </h2>
         <?php if ($error): ?>
             <div class="error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
