@@ -10,6 +10,24 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CelebrAPP</title>
     <style>
+         .alert-notificacion {
+        background: #e6ffed;
+        color: #207227;
+        border: 1.5px solid #b7e4c7;
+        border-radius: 6px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 1.1em;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .alert-notificacion::before {
+        content: "🎉";
+        font-size: 1.5em;
+    }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb; margin: 0; }
         .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 32px 40px 40px 40px; border-radius: 14px; box-shadow: 0 4px 24px #0002; }
         h1, h2 { color: #2d3a5a; }

@@ -1,6 +1,6 @@
 <?php
+session_start();
 require 'config/database.php';
-include 'includes/header.php';
 
 $nombre = $fecha = $telefono = $email = $tipo = '';
 $errores = [];
@@ -17,16 +17,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($tipo === '') $errores[] = 'El tipo de relación es obligatorio.';
 
     if (empty($errores)) {
+        // Forzar ambas fechas a medianoche
+        $hoy = new DateTime('today');
+        $anio_actual = $hoy->format('Y');
+        $mes_dia_cumple = date('m-d', strtotime($fecha));
+        $cumple_this_year = DateTime::createFromFormat('Y-m-d', $anio_actual . '-' . $mes_dia_cumple);
+        $cumple_this_year->setTime(0, 0, 0);
+
+        if ($cumple_this_year < $hoy) {
+            $cumple_this_year->modify('+1 year');
+        }
+
+        $dias_restantes = (int)$hoy->diff($cumple_this_year)->format('%a');
+
+        if ($dias_restantes <= 7) {
+            if ($dias_restantes == 0) {
+                $_SESSION['mensaje'] = "¡Hoy es el cumpleaños de $nombre!";
+            } else {
+                $_SESSION['mensaje'] = "¡El cumpleaños de $nombre es en $dias_restantes día(s)!";
+            }
+        }
+
         $stmt = $conn->prepare("INSERT INTO birthdays (nombre_completo, fecha_nacimiento, telefono, email, tipo_relacion) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param('sssss', $nombre, $fecha, $telefono, $email, $tipo);
         $stmt->execute();
         $stmt->close();
-        header('Location: view_birthdays.php');
+        header('Location: add_birthday.php');
         exit;
     }
 }
+
+include 'includes/header.php';
+date_default_timezone_set('America/Guayaquil');
 ?>
 <h2>Agregar cumpleaños</h2>
+<?php if (isset($_SESSION['🎉mensaje'])): ?>
+    <div class="alert-notificacion">
+        <?= htmlspecialchars($_SESSION['mensaje']) ?>
+    </div>
+    <?php unset($_SESSION['mensaje']); ?>
+<?php endif; ?>
 <?php if ($errores): ?>
     <ul style="color: #b00;">
         <?php foreach ($errores as $e) echo "<li>$e</li>"; ?>
@@ -57,4 +87,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
     <input type="submit" value="Agregar cumpleaños">
 </form>
-<?php include 'includes/footer.php'; ?> 
+<?php include 'includes/footer.php'; ?>

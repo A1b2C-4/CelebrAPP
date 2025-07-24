@@ -3,6 +3,15 @@ require 'includes/auth.php';
 require 'config/database.php';
 include 'includes/header.php';
 
+if (isset($_SESSION['mensaje'])): ?>
+    <div class="alert-notificacion">
+        <?= htmlspecialchars($_SESSION['mensaje']) ?>
+    </div>
+    <?php unset($_SESSION['mensaje']); ?>
+<?php endif; ?>
+
+<?php
+
 // Cumpleaños de hoy
 $hoy = date('m-d');
 $sqlHoy = "SELECT nombre_completo FROM birthdays WHERE DATE_FORMAT(fecha_nacimiento, '%m-%d') = ?";
@@ -46,7 +55,7 @@ $result = $conn->query($sql);
     </div>
 <?php endif; ?>
 <?php if (count($proximos) > 0): ?>
-    <div style="background: #fffbe6; color: #b08900; padding: 12px 18px; border-radius: 6px; margin-bottom: 18px; font-weight: bold;">
+    <div style="background: #fffbe6; color: #b04f00ff; padding: 12px 18px; border-radius: 6px; margin-bottom: 18px; font-weight: bold;">
         Próximos cumpleaños (siguientes 7 días): <?= htmlspecialchars(implode(', ', $proximos)) ?>
     </div>
 <?php endif; ?>
@@ -78,4 +87,5 @@ $result = $conn->query($sql);
 </table>
 <?php
 include 'includes/footer.php';
+?> 
 ?> 
