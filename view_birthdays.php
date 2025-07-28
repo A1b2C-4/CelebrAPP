@@ -3,6 +3,7 @@ require 'includes/auth.php';
 require 'config/database.php';
 include 'includes/header.php';
 
+// Mostrar mensajes de notificación
 if (isset($_SESSION['mensaje'])): ?>
     <div class="alert-notificacion">
         <?= htmlspecialchars($_SESSION['mensaje']) ?>
@@ -11,6 +12,8 @@ if (isset($_SESSION['mensaje'])): ?>
 <?php endif; ?>
 
 <?php
+// Configurar zona horaria
+date_default_timezone_set('America/Guayaquil');
 
 // Cumpleaños de hoy
 $hoy = date('m-d');
@@ -48,44 +51,73 @@ while ($row = $resTodos->fetch_assoc()) {
 $sql = "SELECT * FROM birthdays ORDER BY fecha_nacimiento ASC";
 $result = $conn->query($sql);
 ?>
-<h2>Lista de cumpleaños</h2>
+
+<h1>🎂 Gestión de Cumpleaños</h1>
+
 <?php if (count($cumplenHoy) > 0): ?>
-    <div style="background: #e6ffed; color: #256029; padding: 12px 18px; border-radius: 6px; margin-bottom: 12px; font-weight: bold;">
-        Hoy cumplen años: <?= htmlspecialchars(implode(', ', $cumplenHoy)) ?>
+    <div class="alert-notificacion">
+        🎉 ¡Hoy cumplen años: <?= htmlspecialchars(implode(', ', $cumplenHoy)) ?>!
     </div>
 <?php endif; ?>
+
 <?php if (count($proximos) > 0): ?>
-    <div style="background: #fffbe6; color: #b04f00ff; padding: 12px 18px; border-radius: 6px; margin-bottom: 18px; font-weight: bold;">
-        Próximos cumpleaños (siguientes 7 días): <?= htmlspecialchars(implode(', ', $proximos)) ?>
+    <div class="alert-notificacion alert-warning">
+        ⏰ Próximos cumpleaños (siguientes 7 días): <?= htmlspecialchars(implode(', ', $proximos)) ?>
     </div>
 <?php endif; ?>
-<table>
-    <tr>
-        <th>Nombre completo</th>
-        <th>Fecha de nacimiento</th>
-        <th>Teléfono</th>
-        <th>Email</th>
-        <th>Relación</th>
-        <th>Acciones</th>
-    </tr>
-    <?php while($row = $result->fetch_assoc()): ?>
-    <tr>
-        <td><?= htmlspecialchars($row['nombre_completo']) ?></td>
-        <td><?= date('d/m/Y', strtotime($row['fecha_nacimiento'])) ?></td>
-        <td><?= htmlspecialchars($row['telefono']) ?></td>
-        <td><?= htmlspecialchars($row['email']) ?></td>
-        <td><?= htmlspecialchars($row['tipo_relacion']) ?></td>
-        <td class="actions">
-            
-            <a href="edit_birthday.php?id=<?= $row['id'] ?>" class="button">Editar</a>
-    </br>
-    </br>
-            <a href="delete_birthday.php?id=<?= $row['id'] ?>" class="button" onclick="return confirm('¿Seguro que deseas eliminar este cumpleaños?');">Eliminar</a>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-</table>
-<?php
-include 'includes/footer.php';
-?> 
-?> 
+
+<div style="text-align: right; margin-bottom: 20px;">
+    <a href="add_birthday.php" class="button">➕ Agregar Nuevo Cumpleaños</a>
+</div>
+
+<?php if ($result->num_rows > 0): ?>
+    <table>
+        <thead>
+            <tr>
+                <th>👤 Nombre Completo</th>
+                <th>📅 Fecha de Nacimiento</th>
+                <th>📞 Teléfono</th>
+                <th>📧 Email</th>
+                <th>👥 Relación</th>
+                <th>⚙️ Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while($row = $result->fetch_assoc()): ?>
+            <tr>
+                <td><strong><?= htmlspecialchars($row['nombre_completo']) ?></strong></td>
+                <td><?= date('d/m/Y', strtotime($row['fecha_nacimiento'])) ?></td>
+                <td><?= htmlspecialchars($row['telefono'] ?: '-') ?></td>
+                <td><?= htmlspecialchars($row['email'] ?: '-') ?></td>
+                <td>
+                    <span style="
+                        background: <?= $row['tipo_relacion'] === 'Familiar' ? '#48bb78' : 
+                                      ($row['tipo_relacion'] === 'Amigo' ? '#4299e1' : 
+                                      ($row['tipo_relacion'] === 'Compañero' ? '#ed8936' : '#a0aec0')) ?>;
+                        color: white;
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 0.8em;
+                        font-weight: 500;
+                    ">
+                        <?= htmlspecialchars($row['tipo_relacion']) ?>
+                    </span>
+                </td>
+                <td class="actions">
+                    <a href="edit_birthday.php?id=<?= $row['id'] ?>" class="button" style="background: linear-gradient(45deg, #4299e1, #3182ce);">✏️ Editar</a>
+                    <a href="delete_birthday.php?id=<?= $row['id'] ?>" class="button" style="background: linear-gradient(45deg, #e53e3e, #c53030);" onclick="return confirm('¿Estás seguro de que quieres eliminar este cumpleaños?')">🗑️ Eliminar</a>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <div style="text-align: center; padding: 50px; color: #718096;">
+        <div style="font-size: 4em; margin-bottom: 20px;">🎂</div>
+        <h3>No hay cumpleaños registrados</h3>
+        <p>Comienza agregando el primer cumpleaños a tu lista.</p>
+        <a href="add_birthday.php" class="button" style="margin-top: 20px;">➕ Agregar Primer Cumpleaños</a>
+    </div>
+<?php endif; ?>
+
+<?php include 'includes/footer.php'; ?> 

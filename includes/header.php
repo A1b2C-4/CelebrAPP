@@ -8,107 +8,267 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CelebrAPP</title>
+    <title>CelebrAPP - Gestión de Cumpleaños</title>
     <style>
-         .alert-notificacion {
-        background: #e6ffed;
-        color: #207227;
-        border: 1.5px solid #b7e4c7;
-        border-radius: 6px;
-        padding: 15px 20px;
-        margin-bottom: 20px;
-        font-weight: bold;
-        font-size: 1.1em;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .alert-notificacion::before {
-        content: "🎉";
-        font-size: 1.5em;
-    }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb; margin: 0; }
-        .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 32px 40px 40px 40px; border-radius: 14px; box-shadow: 0 4px 24px #0002; }
-        h1, h2 { color: #2d3a5a; }
-        table { width: 100%; border-collapse: collapse; margin-top: 18px; background: #fafbff; }
-        th, td { padding: 10px 12px; border-bottom: 1px solid #e3e7ef; text-align: left; }
-        th { background: #e9eafd; color: #2d3a5a; font-weight: 600; }
-        tr:last-child td { border-bottom: none; }
-        a.button, input[type=submit], button { background: #4f6bed; color: #fff; padding: 8px 18px; border: none; border-radius: 5px; text-decoration: none; cursor: pointer; transition: background 0.2s; font-size: 1em; }
-        a.button:hover, input[type=submit]:hover, button:hover { background: #364fc7; }
-        .actions a { margin-right: 8px; }
-        form { margin-top: 18px; }
-        label { display: block; margin-top: 14px; color: #2d3a5a; font-weight: 500; }
-        input, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #bfc9e0; border-radius: 4px; font-size: 1em; }
-        .footer { text-align: center; color: #888; margin-top: 40px; font-size: 1em; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0; 
+        }
+        
+        .container { 
+            max-width: 1000px; 
+            margin: 20px auto; 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1, h2 { 
+            color: #2d3748; 
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            background: #f8fafc; 
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        th, td { 
+            padding: 15px 12px; 
+            border-bottom: 1px solid #e2e8f0; 
+            text-align: left; 
+        }
+        
+        th { 
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        
+        tr:last-child td { 
+            border-bottom: none; 
+        }
+        
+        a.button, input[type=submit], button { 
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            font-size: 1em; 
+            font-weight: 500;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        a.button:hover, input[type=submit]:hover, button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .actions a { 
+            margin-right: 8px; 
+        }
+        
+        form { 
+            margin-top: 20px; 
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+        }
+        
+        label { 
+            display: block; 
+            margin-top: 15px; 
+            color: #2d3748; 
+            font-weight: 500; 
+            font-size: 0.95em;
+        }
+        
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 8px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 8px; 
+            font-size: 1em; 
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .footer { 
+            text-align: center; 
+            color: #718096; 
+            margin-top: 40px; 
+            font-size: 0.9em; 
+        }
+        
         /* Menú principal */
         .main-menu {
             display: flex;
-            gap: 14px;
-            background: transparent;
-            padding: 0;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 18px;
+            gap: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
             align-items: center;
+            flex-wrap: wrap;
         }
+        
         .main-menu a.menu-btn {
-            background: #43b649;
-            color: #fff;
+            background: rgba(255,255,255,0.2);
+            color: white;
             text-decoration: none;
             padding: 12px 24px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 500;
             font-size: 1em;
-            box-shadow: 0 2px 8px #0001;
-            border: none;
-            transition: background 0.18s, box-shadow 0.18s;
-            display: block;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
+        
         .main-menu a.menu-btn:hover, .main-menu a.menu-btn.active {
-            background: #2e8b36;
-            color: #fff;
-            box-shadow: 0 4px 16px #0002;
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
+        
         .main-menu a.logout-btn {
             background: #e53e3e;
-            color: #fff;
-            margin-left: 12px;
-            border-radius: 6px;
+            color: white;
+            margin-left: auto;
+            border-radius: 8px;
             padding: 12px 24px;
             font-weight: 500;
             font-size: 1em;
-            border: none;
-            transition: background 0.18s, box-shadow 0.18s;
-            box-shadow: 0 2px 8px #0001;
+            transition: all 0.3s ease;
             text-decoration: none;
-            display: block;
         }
+        
         .main-menu a.logout-btn:hover {
-            background: #b91c1c;
-            color: #fff;
-            box-shadow: 0 4px 16px #0002;
+            background: #c53030;
+            transform: translateY(-2px);
         }
+        
         .main-menu .user-info {
             margin-left: auto;
-            color: #2d3a5a;
+            color: white;
             font-weight: 500;
-            padding: 0 10px;
+            font-size: 1.1em;
+        }
+        
+        .alert-notificacion {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.1em;
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
             display: flex;
             align-items: center;
+            gap: 15px;
         }
-        hr { border: none; border-top: 1px solid #e3e7ef; margin: 18px 0; }
+        
+        .alert-notificacion::before {
+            content: "🎉";
+            font-size: 1.8em;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(45deg, #ed8936, #dd6b20);
+            box-shadow: 0 4px 12px rgba(237, 137, 54, 0.3);
+        }
+        
+        .alert-warning::before {
+            content: "⚠️";
+        }
+        
+        .alert-error {
+            background: linear-gradient(45deg, #e53e3e, #c53030);
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+        }
+        
+        .alert-error::before {
+            content: "❌";
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .main-menu {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .main-menu .user-info {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>CelebrAPP 🎉</h1>
-    <nav class="main-menu">
-        <a href="index.php" class="menu-btn <?= basename($_SERVER['PHP_SELF'])=='index.php'?'active':'' ?>">Inicio</a>
-        <a href="view_birthdays.php" class="menu-btn <?= basename($_SERVER['PHP_SELF'])=='view_birthdays.php'?'active':'' ?>">Ver cumpleaños</a>
-        <a href="add_birthday.php" class="menu-btn <?= basename($_SERVER['PHP_SELF'])=='add_birthday.php'?'active':'' ?>">Agregar cumpleaños</a>
-        <?php if (isset($_SESSION['username'])): ?>
-            <a href="logout.php" class="logout-btn">Cerrar sesión</a>
+    <div class="container">
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <div class="main-menu">
+                <a href="view_birthdays.php" class="menu-btn">Ver Cumpleaños</a>
+                <a href="add_birthday.php" class="menu-btn">Agregar Cumpleaños</a>
+                <div class="user-info">
+                    Bienvenido, <?= htmlspecialchars($_SESSION['username']) ?>
+                </div>
+                <a href="logout.php" class="logout-btn">Cerrar Sesión</a>
+            </div>
         <?php endif; ?>
-    </nav>
-    <hr>

@@ -1,13 +1,21 @@
 <?php
 // Configuración de la conexión a la base de datos
-
 $host = 'localhost';
-$db   = 'celebraapp'; //base de datos 
-$user = 'root';      // usuario 
+$db   = 'celebraapp';
+$user = 'root';
 $pass = '';
 
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    die('Error de conexión: ' . $conn->connect_error);
+try {
+    $conn = new mysqli($host, $user, $pass, $db);
+    
+    if ($conn->connect_error) {
+        throw new Exception('Error de conexión: ' . $conn->connect_error);
+    }
+    
+    // Configurar charset
+    $conn->set_charset("utf8");
+    
+} catch (Exception $e) {
+    die('Error de base de datos: ' . $e->getMessage());
 }
 ?> 

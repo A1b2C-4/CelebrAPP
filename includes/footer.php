@@ -1,7 +1,9 @@
     <div class="footer">
+        <p>&copy; 2025 CelebrAPP - Gestión de Cumpleaños</p>
         <?php if (isset($_SESSION['user_id'])): ?>
-            <br>
-            <a href="change_password.php" class="button" style="background:#f6ad55;margin-top:10px;">Cambiar contraseña</a>
+            <div style="margin-top: 20px;">
+                <a href="change_password.php" class="button" style="background: linear-gradient(45deg, #ed8936, #dd6b20);">🔐 Cambiar Contraseña</a>
+            </div>
         <?php endif; ?>
     </div>
 </div>
