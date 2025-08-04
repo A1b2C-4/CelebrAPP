@@ -1,6 +1,15 @@
 <?php
 require 'includes/auth.php';
+
+/* SISTEMA DE ROLES - PROTECCIÓN DE EDICIÓN
+   =========================================
+   Solo usuarios con rol 'admin' pueden editar cumpleaños
+   Si un usuario normal intenta acceder, será redirigido al index
+*/
+requireAdmin(); // Solo admins pueden editar cumpleaños
+
 require 'config/database.php';
+include 'includes/header.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) {
@@ -8,7 +17,6 @@ if (!$id) {
     exit;
 }
 
-// Obtener datos del cumpleaños
 $stmt = $conn->prepare("SELECT * FROM birthdays WHERE id = ?");
 $stmt->bind_param('i', $id);
 $stmt->execute();
@@ -17,8 +25,8 @@ $birthday = $result->fetch_assoc();
 $stmt->close();
 
 if (!$birthday) {
-    $_SESSION['mensaje'] = "❌ No se encontró el cumpleaños.";
-    header('Location: view_birthdays.php');
+    echo '<p>No se encontró el cumpleaños.</p>';
+    include 'includes/footer.php';
     exit;
 }
 
@@ -36,101 +44,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $tipo = $_POST['tipo_relacion'];
 
-    // Validaciones
-    if (empty($nombre)) $errores[] = 'El nombre es obligatorio.';
-    if (empty($fecha)) $errores[] = 'La fecha de nacimiento es obligatoria.';
-    if (empty($tipo)) $errores[] = 'El tipo de relación es obligatorio.';
-    
-    // Validar email si se proporciona
-    if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errores[] = 'El formato del email no es válido.';
-    }
+    if ($nombre === '') $errores[] = 'El nombre es obligatorio.';
+    if ($fecha === '') $errores[] = 'La fecha de nacimiento es obligatoria.';
+    if ($tipo === '') $errores[] = 'El tipo de relación es obligatorio.';
 
     if (empty($errores)) {
         $stmt = $conn->prepare("UPDATE birthdays SET nombre_completo=?, fecha_nacimiento=?, telefono=?, email=?, tipo_relacion=? WHERE id=?");
         $stmt->bind_param('sssssi', $nombre, $fecha, $telefono, $email, $tipo, $id);
-        
-        if ($stmt->execute()) {
-            $_SESSION['mensaje'] = "✅ Cumpleaños de $nombre actualizado exitosamente.";
-            header('Location: view_birthdays.php');
-            exit;
-        } else {
-            $errores[] = 'Error al actualizar en la base de datos.';
-        }
+        $stmt->execute();
         $stmt->close();
+        header('Location: view_birthdays.php');
+        exit;
     }
 }
-
-include 'includes/header.php';
 ?>
-
-<h1>✏️ Editar Cumpleaños</h1>
-
-<?php if (!empty($errores)): ?>
-    <div class="alert-notificacion alert-error">
-        <strong>Errores encontrados:</strong>
-        <ul style="margin: 10px 0 0 20px;">
-            <?php foreach ($errores as $error): ?>
-                <li><?= htmlspecialchars($error) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
+<h2>Editar cumpleaños</h2>
+<?php if ($errores): ?>
+    <ul style="color: #b00;">
+        <?php foreach ($errores as $e) echo "<li>$e</li>"; ?>
+    </ul>
 <?php endif; ?>
-
 <form method="post">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div>
-            <label for="nombre_completo">👤 Nombre Completo *</label>
-            <input type="text" id="nombre_completo" name="nombre_completo" value="<?= htmlspecialchars($nombre) ?>" required placeholder="Ej: Juan Pérez">
-        </div>
-        
-        <div>
-            <label for="fecha_nacimiento">📅 Fecha de Nacimiento *</label>
-            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?= htmlspecialchars($fecha) ?>" required>
-        </div>
-        
-        <div>
-            <label for="telefono">📞 Teléfono</label>
-            <input type="tel" id="telefono" name="telefono" value="<?= htmlspecialchars($telefono) ?>" placeholder="Ej: 0991234567">
-        </div>
-        
-        <div>
-            <label for="email">📧 Email</label>
-            <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" placeholder="Ej: juan@email.com">
-        </div>
-        
-        <div style="grid-column: 1 / -1;">
-            <label for="tipo_relacion">👥 Tipo de Relación *</label>
-            <select id="tipo_relacion" name="tipo_relacion" required>
-                <option value="">Selecciona una opción...</option>
-                <option value="Familiar" <?= $tipo === 'Familiar' ? 'selected' : '' ?>>👨‍👩‍👧‍👦 Familiar</option>
-                <option value="Amigo" <?= $tipo === 'Amigo' ? 'selected' : '' ?>>👥 Amigo</option>
-                <option value="Compañero" <?= $tipo === 'Compañero' ? 'selected' : '' ?>>💼 Compañero</option>
-                <option value="Otro" <?= $tipo === 'Otro' ? 'selected' : '' ?>>🤝 Otro</option>
-            </select>
-        </div>
-    </div>
-    
-    <div style="margin-top: 30px; text-align: center;">
-        <button type="submit" class="button" style="background: linear-gradient(45deg, #4299e1, #3182ce);">💾 Guardar Cambios</button>
-        <a href="view_birthdays.php" class="button" style="background: linear-gradient(45deg, #718096, #4a5568);">↩️ Cancelar</a>
-    </div>
+    <label>Nombre completo:
+        <input type="text" name="nombre_completo" value="<?= htmlspecialchars($nombre) ?>" required>
+    </label>
+    <label>Fecha de nacimiento:
+        <input type="date" name="fecha_nacimiento" value="<?= htmlspecialchars($fecha) ?>" required>
+    </label>
+    <label>Teléfono:
+        <input type="text" name="telefono" value="<?= htmlspecialchars($telefono) ?>">
+    </label>
+    <label>Email:
+        <input type="email" name="email" value="<?= htmlspecialchars($email) ?>">
+    </label>
+    <label>Tipo de relación:
+        <select name="tipo_relacion" required>
+            <option value="">Selecciona...</option>
+            <option value="Amigo" <?= $tipo==='Amigo'?'selected':'' ?>>Amigo</option>
+            <option value="Familiar" <?= $tipo==='Familiar'?'selected':'' ?>>Familiar</option>
+            <option value="Compañero" <?= $tipo==='Compañero'?'selected':'' ?>>Compañero</option>
+            <option value="Otro" <?= $tipo==='Otro'?'selected':'' ?>>Otro</option>
+        </select>
+    </label>
+    <br>
+    <input type="submit" value="Guardar cambios">
 </form>
-
-<script>
-// Validación en tiempo real para email
-document.getElementById('email').addEventListener('blur', function() {
-    const email = this.value;
-    if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-        this.style.borderColor = '#e53e3e';
-        this.style.boxShadow = '0 0 0 3px rgba(229, 62, 62, 0.1)';
-        this.setCustomValidity('Por favor, ingresa un email válido');
-    } else {
-        this.style.borderColor = '#e2e8f0';
-        this.style.boxShadow = 'none';
-        this.setCustomValidity('');
-    }
-});
-</script>
-
 <?php include 'includes/footer.php'; ?> 

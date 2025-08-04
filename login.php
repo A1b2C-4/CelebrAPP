@@ -16,7 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     if ($username && $password) {
-        $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+        // SISTEMA DE ROLES: Consulta modificada para incluir el campo 'role'
+        // Permite identificar si el usuario es 'admin' o 'user'
+        $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ?");
         $stmt->bind_param('s', $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -26,7 +28,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && $password === $user['password']) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
-            header('Location: index.php');
+            
+            // SISTEMA DE ROLES: Guardar rol en sesión para control de acceso
+            // Este valor se usa en las funciones isAdmin() e isUser()
+            $_SESSION['role'] = $user['role']; // NUEVO: Guardar rol en sesión
+            
+            /* REDIRECCIÓN AUTOMÁTICA SEGÚN ROL
+               ================================
+               - ADMIN: Redirige a admin_dashboard.php (control completo)
+               - USER: Redirige a user_dashboard.php (solo lectura)
+            */
+            if ($user['role'] === 'admin') {
+                header('Location: admin_dashboard.php');
+            } else {
+                header('Location: user_dashboard.php');
+            }
             exit;
         } else {
             $error = 'Usuario o contraseña incorrectos';
@@ -163,12 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <div class="logo">🎉</div>
         <h2>CelebrAPP</h2>
-        
-        <div class="demo-info">
-            <strong>Credenciales de prueba:</strong>
-            Usuario: admin1<br>
-            Contraseña: r
-        </div>
+
         
         <?php if ($error): ?>
             <div class="error"><?= htmlspecialchars($error) ?></div>

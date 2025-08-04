@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CelebrAPP - Gestión de Cumpleaños</title>
+    <title></title>
     <style>
         * {
             margin: 0;
@@ -145,7 +145,7 @@ if (session_status() === PHP_SESSION_NONE) {
         .main-menu {
             display: flex;
             gap: 15px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #90b0d1ff, #90b0d1ff);
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 25px;
@@ -172,7 +172,7 @@ if (session_status() === PHP_SESSION_NONE) {
         }
         
         .main-menu a.logout-btn {
-            background: #e53e3e;
+            background:  #dd6b20;
             color: white;
             margin-left: auto;
             border-radius: 8px;
@@ -184,7 +184,7 @@ if (session_status() === PHP_SESSION_NONE) {
         }
         
         .main-menu a.logout-btn:hover {
-            background: #c53030;
+            background: #dd6b20;
             transform: translateY(-2px);
         }
         
@@ -263,12 +263,32 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <div class="container">
         <?php if (isset($_SESSION['user_id'])): ?>
+            <!-- SISTEMA DE ROLES - MENÚ PRINCIPAL DINÁMICO
+                 ==========================================
+                 El menú cambia según el rol del usuario:
+                 - ADMIN: Ve dashboard admin y opciones completas
+                 - USER: Ve dashboard usuario y opciones limitadas
+                 - Ambos: Ven indicador visual de su rol
+            -->
             <div class="main-menu">
-                <a href="view_birthdays.php" class="menu-btn">Ver Cumpleaños</a>
-                <a href="add_birthday.php" class="menu-btn">Agregar Cumpleaños</a>
+                <!-- Enlace al dashboard específico según rol -->
+                <?php if (isAdmin()): ?>
+                    <a href="admin_dashboard.php" class="menu-btn" style="background: #dd6b20;">Inicio </a>
+                <?php else: ?>
+                    <a href="user_dashboard.php" class="menu-btn" style="background:  #dd6b20;">Inicio</a>
+                <?php endif; ?>
+     
+
+                <!-- Información del usuario con indicador de rol -->
                 <div class="user-info">
-                    Bienvenido, <?= htmlspecialchars($_SESSION['username']) ?>
+                
+                    <!-- INDICADOR VISUAL DE ROL -->
+                    <?php if (isAdmin()): ?>
+                        <span style="background: #e53e3e; padding: 4px 8px; border-radius: 12px; font-size: 0.8em; margin-left: 8px;">🔴 ADMIN</span>
+                    <?php else: ?>
+                        <span style="background: #4299e1; padding: 4px 8px; border-radius: 12px; font-size: 0.8em; margin-left: 8px;">🔵 USER</span>
+                    <?php endif; ?>
                 </div>
-                <a href="logout.php" class="logout-btn">Cerrar Sesión</a>
+                <a href="logout.php" class="logout-btn"> ⏻ Salir </a>
             </div>
         <?php endif; ?>
