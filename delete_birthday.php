@@ -29,29 +29,9 @@ if ($id) {
         if ($stmt->execute()) {
             $_SESSION['mensaje'] = "🗑️ Cumpleaños de " . $birthday['nombre_completo'] . " eliminado exitosamente.";
             
-            // OPCIÓN A: Solo reiniciar AUTO_INCREMENT (mantiene IDs actuales)
+            // reiniciar AUTO_INCREMENT (mantiene IDs actuales)
             $conn->query("ALTER TABLE birthdays AUTO_INCREMENT = 1");
             
-            // OPCIÓN B: Renumerar todos los IDs (descomenta si quieres esto)
-            /*
-            // Crear tabla temporal con IDs consecutivos
-            $conn->query("CREATE TEMPORARY TABLE temp_birthdays AS 
-                         SELECT ROW_NUMBER() OVER (ORDER BY id) as new_id, 
-                                nombre_completo, fecha_nacimiento, telefono, email, tipo_relacion, created_at, updated_at
-                         FROM birthdays ORDER BY id");
-            
-            // Limpiar tabla original
-            $conn->query("DELETE FROM birthdays");
-            $conn->query("ALTER TABLE birthdays AUTO_INCREMENT = 1");
-            
-            // Insertar datos con IDs consecutivos
-            $conn->query("INSERT INTO birthdays (nombre_completo, fecha_nacimiento, telefono, email, tipo_relacion, created_at, updated_at)
-                         SELECT nombre_completo, fecha_nacimiento, telefono, email, tipo_relacion, created_at, updated_at 
-                         FROM temp_birthdays ORDER BY new_id");
-            
-            // Eliminar tabla temporal
-            $conn->query("DROP TEMPORARY TABLE temp_birthdays");
-            */
             
         } else {
             $_SESSION['mensaje'] = "❌ Error al eliminar el cumpleaños.";
