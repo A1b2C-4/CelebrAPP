@@ -1,16 +1,4 @@
 <?php
-/*  Funcionalidades permitidas:
-   - Ver lista de cumpleaños
-   - Agregar nuevos cumpleaños
-   - Editar cumpleaños existentes
-   - Eliminar cumpleaños
-   - Registrar nuevos usuarios
-   - Gestionar el sistema completo
-   
-   Control de acceso:
-   - Solo administradores pueden acceder
-   - Si es usuario normal, redirige a user_dashboard
-*/
 
 require 'includes/auth.php';
 
@@ -34,6 +22,9 @@ if (isset($_SESSION['mensaje'])): ?>
 <?php
 // Configurar zona horaria
 date_default_timezone_set('America/Guayaquil');
+
+// Configurar idioma español
+setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain.1252');
 
 // Cumpleaños de hoy
 $hoy = date('m-d');
@@ -149,10 +140,29 @@ $result = $conn->query($sql);
 <!-- Panel de Cumpleaños - Verde Menta -->
 <div id="birthdays-info" style="display: none; background: linear-gradient(135deg, #F0F9F0 0%, #E8F5E8 100%); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(127, 205, 205, 0.15); border-left: 5px solid #7FCDCD;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3 style="margin: 0; color: #2C5530; font-size: 1.4em; font-weight: 600;">🎂 Análisis de Cumpleaños</h3>
+        <h3 style="margin: 0; color: #2C5530; font-size: 1.4em; font-weight: 600;">🎂 Cumpleaños</h3>
         <button onclick="toggleInfo('birthdays')" style="background: #E8F5E8; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; color: #2C5530; font-weight: 500; transition: all 0.2s ease;" onmouseover="this.style.background='#D4F4D4'" onmouseout="this.style.background='#E8F5E8'">✖️ Cerrar</button>
     </div>
     <?php
+    // Función para traducir meses al español
+    function traducirMes($mesIngles) {
+        $meses = [
+            'January' => 'Enero',
+            'February' => 'Febrero', 
+            'March' => 'Marzo',
+            'April' => 'Abril',
+            'May' => 'Mayo',
+            'June' => 'Junio',
+            'July' => 'Julio',
+            'August' => 'Agosto',
+            'September' => 'Septiembre',
+            'October' => 'Octubre',
+            'November' => 'Noviembre',
+            'December' => 'Diciembre'
+        ];
+        return $meses[$mesIngles] ?? $mesIngles;
+    }
+    
     // Reset query pointers for reuse
     $cumpleanosPorMes = $conn->query("
         SELECT MONTHNAME(fecha_nacimiento) as mes, COUNT(*) as total 
@@ -170,16 +180,16 @@ $result = $conn->query($sql);
     ?>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
         <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(127, 205, 205, 0.1);">
-            <h4 style="color: #2C5530; margin-bottom: 15px; font-size: 1.1em; font-weight: 600;">📅 Distribución por Mes</h4>
+            <h4 style="color: #2C5530; margin-bottom: 15px; font-size: 1.1em; font-weight: 600;">📅 Mes</h4>
             <?php while($row = $cumpleanosPorMes->fetch_assoc()): ?>
                 <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #E8F5E8; color: #2C5530;">
-                    <span style="font-weight: 500;"><?= $row['mes'] ?></span>
+                    <span style="font-weight: 500;"><?= traducirMes($row['mes']) ?></span>
                     <strong style="color: #7FCDCD; font-size: 1.1em;"><?= $row['total'] ?></strong>
                 </div>
             <?php endwhile; ?>
         </div>
         <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(127, 205, 205, 0.1);">
-            <h4 style="color: #2C5530; margin-bottom: 15px; font-size: 1.1em; font-weight: 600;">👥 Por Tipo de Relación</h4>
+            <h4 style="color: #2C5530; margin-bottom: 15px; font-size: 1.1em; font-weight: 600;">👥 Relación</h4>
             <?php while($row = $cumpleanosPorRelacion->fetch_assoc()): ?>
                 <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #E8F5E8; color: #2C5530;">
                     <span style="font-weight: 500;"><?= $row['tipo_relacion'] ?></span>
@@ -241,7 +251,7 @@ $result = $conn->query($sql);
     $administradores = $conn->query("SELECT id, username, created_at FROM users WHERE role = 'admin' ORDER BY created_at DESC");
     ?>
     <div style="background: linear-gradient(135deg, #FFF8E1 0%, #FFF3C4 100%); padding: 18px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #FFB74D;">
-        <p style="margin: 0; color: #E65100; font-weight: 500;"><strong>⚠️ Información Sensible:</strong> Lista de usuarios con permisos administrativos completos.</p>
+        <p style="margin: 0; color: #E65100; font-weight: 500;"><strong>⚠️ Información Sensible:</strong></p>
     </div>
     <div style="display: grid; gap: 15px;">
         <?php while($admin = $administradores->fetch_assoc()): ?>

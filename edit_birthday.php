@@ -1,11 +1,5 @@
 <?php
 require 'includes/auth.php';
-
-/* SISTEMA DE ROLES - PROTECCIÓN DE EDICIÓN
-   =========================================
-   Solo usuarios con rol 'admin' pueden editar cumpleaños
-   Si un usuario normal intenta acceder, será redirigido al index
-*/
 requireAdmin(); // Solo admins pueden editar cumpleaños
 
 require 'config/database.php';

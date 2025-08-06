@@ -263,13 +263,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <div class="container">
         <?php if (isset($_SESSION['user_id'])): ?>
-            <!-- SISTEMA DE ROLES - MENÚ PRINCIPAL DINÁMICO
-                 ==========================================
-                 El menú cambia según el rol del usuario:
-                 - ADMIN: Ve dashboard admin y opciones completas
-                 - USER: Ve dashboard usuario y opciones limitadas
-                 - Ambos: Ven indicador visual de su rol
-            -->
+            <!-- MENÚ PRINCIPAL DINÁMICO-->
             <div class="main-menu">
                 <!-- Enlace al dashboard específico según rol -->
                 <?php if (isAdmin()): ?>

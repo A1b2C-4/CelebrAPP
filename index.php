@@ -1,12 +1,6 @@
 <?php
-/* =====================================================
-   PÁGINA DE REDIRECCIÓN AUTOMÁTICA SEGÚN ROL
-   =====================================================
-   Este archivo redirige automáticamente a los usuarios
-   según su rol después del login:
-   
-   - ADMIN: admin_dashboard.php (control completo)
-   - USER: user_dashboard.php (solo lectura)
+/*  ADMIN: admin_dashboard.php (control completo)
+    USER: user_dashboard.php (solo lectura)
    
    Si no hay sesión activa, redirige al login
 */
@@ -25,8 +19,7 @@ if (!isset($_SESSION['user_id'])) {
 // Incluir funciones de autenticación para verificar roles
 require_once 'includes/auth.php';
 
-/* REDIRECCIÓN AUTOMÁTICA SEGÚN ROL
-   ================================
+/*
    Detecta el rol del usuario y redirige al dashboard apropiado
 */
 if (isAdmin()) {

@@ -1,19 +1,5 @@
 <?php
-/* =====================================================
-   DASHBOARD DE USUARIO - SOLO LECTURA
-   =====================================================
-   Página específica para usuarios con rol 'user'
-   
-   Funcionalidades permitidas:
-   - Ver lista de cumpleaños (solo lectura)
-   - Ver detalles de cumpleaños
-   - Cambiar su propia contraseña
-   
-   Funcionalidades NO permitidas:
-   - Editar cumpleaños
-   - Eliminar cumpleaños
-   - Registrar usuarios
-   - Agregar cumpleaños
+/* Solo leectura para usuarios normales
 */
 
 require 'includes/auth.php';

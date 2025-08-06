@@ -1,21 +1,8 @@
 <?php
-/* 
-   AGREGAR CUMPLEAÑOS - SOLO ADMINISTRADORES
-
-   
-   Funcionalidades:
-   - Verificación estricta de permisos de administrador
-   - Formulario para agregar nuevos cumpleaños
-   - Validaciones de datos
-*/
 
 require 'includes/auth.php';
 
-/* SISTEMA DE ROLES - PROTECCIÓN DE AGREGADO
-   ==========================================
-   Solo usuarios con rol 'admin' pueden agregar cumpleaños
-   Si un usuario normal intenta acceder, será redirigido al dashboard
-*/
+
 requireAdmin(); // Solo admins pueden agregar cumpleaños
 
 require 'config/database.php';

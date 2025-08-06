@@ -15,6 +15,9 @@ try {
     // Configurar charset
     $conn->set_charset("utf8");
     
+    // Configurar idioma español para fechas
+    $conn->query("SET lc_time_names = 'es_ES'");
+    
 } catch (Exception $e) {
     die('Error de base de datos: ' . $e->getMessage());
 }

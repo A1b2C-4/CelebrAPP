@@ -29,15 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             
-            // SISTEMA DE ROLES: Guardar rol en sesión para control de acceso
             // Este valor se usa en las funciones isAdmin() e isUser()
-            $_SESSION['role'] = $user['role']; // NUEVO: Guardar rol en sesión
+            $_SESSION['role'] = $user['role']; //Guardar rol en sesión
             
-            /* REDIRECCIÓN AUTOMÁTICA SEGÚN ROL
-               ================================
-               - ADMIN: Redirige a admin_dashboard.php (control completo)
-               - USER: Redirige a user_dashboard.php (solo lectura)
-            */
+        
             if ($user['role'] === 'admin') {
                 header('Location: admin_dashboard.php');
             } else {

@@ -1,23 +1,6 @@
 <?php
-/* =====================================================
-   SISTEMA DE ROLES - REGISTRO DE USUARIOS
-   =====================================================
-   Este archivo permite SOLO a administradores crear nuevos usuarios
-   
-   Funcionalidades:
-   - Control de acceso: requireAdmin()
-   - Validación de formularios
-   - Creación de usuarios con roles específicos
-   - Solo admins pueden crear otros admins
-   
-   Seguridad:
-   - Verificación de usuario único
-   - Validación de contraseñas
-   - Control de roles
-*/
-
 require_once 'includes/auth.php';
-requireAdmin(); // CRÍTICO: Solo admins pueden acceder
+requireAdmin(); // Solo admins pueden acceder
 require_once 'config/database.php';
 
 $error = '';
